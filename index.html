@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Real-Time Stock Price</title>
+</head>
+<body>
+    <h1>Real-Time Stock Price</h1>
+    <div id="stock-price"></div>
+
+    <script>
+        const socket = new WebSocket('ws://localhost:3000');
+
+        socket.onopen = function(event) {
+            console.log('WebSocket connected');
+        };
+
+        socket.onmessage = function(event) {
+            const data = JSON.parse(event.data);
+            console.log(data);
+            document.getElementById('stock-price').innerHTML = `
+                <h2>Stock: ${data.ticker}</h2>
+                <h2>Price: ₹${data.price}</h2>
+            `;
+        };
+
+        socket.onclose = function(event) {
+            console.log('WebSocket disconnected');
+        };
+    </script>
+</body>
+</html>
